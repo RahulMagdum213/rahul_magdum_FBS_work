@@ -2,15 +2,15 @@
 
 void main()
 {
-	int stno,endno;
+	int a,z;
 	int sum=0;
 	printf("Enter numbers from to till u want sum: ");
-	scanf("%d%d",&stno,&endno);
+	scanf("%d%d",&a,&z);
 	
-	while(stno<=endno)
+	while(a<=z)
 	{
-		sum=sum+stno;
-		stno++;	
+		sum=sum+a;
+		a++;	
 	}
 	printf("%d",sum);
 }
