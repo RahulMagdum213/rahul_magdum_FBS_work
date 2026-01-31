@@ -9,10 +9,10 @@ void main()
 	
 	while(a<=no){
 		mul=mul*a;
-		printf("%d*",a);
+		
 		a++;
 		
 		
 	}
-	printf("factorial is:%d",mul);	
+	printf("%d!=%d",no,mul);	
 }

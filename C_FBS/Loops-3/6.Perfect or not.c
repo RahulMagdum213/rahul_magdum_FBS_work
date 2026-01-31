@@ -15,10 +15,6 @@ void main()
 	a++;
 	}
 	
-	if(no==sum){
-		printf("Perfect");
-	}
-	else{
-		printf("Not Perfect");
-	}
+	(no==sum) ? printf("Perfect") : printf("Not Perfect");
+	
 }

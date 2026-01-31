@@ -12,10 +12,6 @@ void main()
 		sum=sum+rem*rem*rem;
 		no=no/10;
 	}
-	if(sum==orgno){
-		printf("Armstrong");
-	}
-	else{
-		printf("Not Armstrong");
-	}
+	(sum==orgno)? printf("Armstrong") : printf("Not Armstrong");
+
 }
