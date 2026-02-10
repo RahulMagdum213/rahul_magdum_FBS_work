@@ -5,6 +5,7 @@ void main(){
 	
 	char str1[10]="FBS";
 	char str2[10]="Solutions";
+	
 	char str3[20];
 	char str4[20];
 	
