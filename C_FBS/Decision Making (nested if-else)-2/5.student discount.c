@@ -10,7 +10,7 @@ void main()
 	printf("Are you student?(y=yes,n=no): ");
 	scanf(" %c",&is_stu);
 	
-	if(is_stu=='y')
+	if(is_stu=='y' || is_stu=='yes')
 	{
 		if(price>=500)
 		    dis=price*0.20;

@@ -32,7 +32,7 @@ void main(){
 	
 	printf("Last B: %s\n", strchr(str1, 'B'));  //Finds last occurrence of character 'B' in str1
 	
-	printf("Substring: %s\n", strstr("Solutions", "tions")); // finds substring
+	printf("Substring: %s\n", strstr("Solutions", "tio")); // finds substring
 	
 	memcpy(str4, str1, strlen(str1) + 1); // Copies memory from str1 to str4    +1 is for null
 	printf("str4 now: %s\n",str4);
