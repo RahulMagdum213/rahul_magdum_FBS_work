@@ -7,7 +7,7 @@ void main()
 	int r1,r2,r3,temp,rev;
 	r1=a%10;
 	temp=a/10;
-	r2=temp%10;
+	r2=temp%10;  // you can do directly like r2 = (no/10) % 10
 	r3=temp/10;
 //	printf("%d%d%d\n",r1,r2,r3);
 	
