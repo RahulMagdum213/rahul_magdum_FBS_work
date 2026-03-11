@@ -1,0 +1,354 @@
+Q1.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| first              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sql_1              |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use sql_1;
+Database changed
+
+Q2.
+
+mysql> create table countries(
+    -> country_id int,
+    -> country_name varchar(20),
+    -> region_id int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int         | YES  |     | NULL    |       |
+| country_name | varchar(20) | YES  |     | NULL    |       |
+| region_id    | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+Q3.
+
+mysql> create table jobs (
+    -> job_id, job_title,
+    -> ^C
+mysql> create table jobs (
+    -> job_id int, job_title varchar(20),
+    -> min_salary decimal(7,2), max_salary decimal(8,2) );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table employee
+    -> add primary key (job_id);
+ERROR 1146 (42S02): Table 'sql_1.employee' doesn't exist
+mysql> alter table jobs
+    -> add primary key (job_id);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table jobs
+    -> modify column job_title varchar(20) not null;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table jobs
+    -> modify column max_salary decimal(8,2) check(max_salary <= 25000);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int          | NO   | PRI | NULL    |       |
+| job_title  | varchar(20)  | NO   |     | NULL    |       |
+| min_salary | decimal(7,2) | YES  |     | NULL    |       |
+| max_salary | decimal(8,2) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> show create jobs;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'jobs' at line 1
+mysql> show create table jobs;
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                                                                                                                  |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| jobs  | CREATE TABLE `jobs` (
+  `job_id` int NOT NULL,
+  `job_title` varchar(20) NOT NULL,
+  `min_salary` decimal(7,2) DEFAULT NULL,
+  `max_salary` decimal(8,2) DEFAULT NULL,
+  PRIMARY KEY (`job_id`),
+  CONSTRAINT `jobs_chk_1` CHECK ((`max_salary` <= 25000))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+Q4. 
+
+mysql> create table job_history (
+    -> employee_id int,
+    -> start_date date, end_date date, job_id int,department_id int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc job_history;
++---------------+------+------+-----+---------+-------+
+| Field         | Type | Null | Key | Default | Extra |
++---------------+------+------+-----+---------+-------+
+| employee_id   | int  | YES  |     | NULL    |       |
+| start_date    | date | YES  |     | NULL    |       |
+| end_date      | date | YES  |     | NULL    |       |
+| job_id        | int  | YES  |     | NULL    |       |
+| department_id | int  | YES  |     | NULL    |       |
++---------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+Q5.
+
+mysql> alter table countries modify column country_id int unique;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int         | YES  | UNI | NULL    |       |
+| country_name | varchar(20) | YES  |     | NULL    |       |
+| region_id    | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+Q6. 
+
+mysql> create table jobs_default(
+    -> job_id int, job_title varchar(29),
+    -> min_salary decimal(7,2) , max_salary decimal(7,2));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc jobs_default;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int          | YES  |     | NULL    |       |
+| job_title  | varchar(29)  | YES  |     | NULL    |       |
+| min_salary | decimal(7,2) | YES  |     | NULL    |       |
+| max_salary | decimal(7,2) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table jobs_default
+    -> modify column job_title varchar(20) default "";
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc jobs_default;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int          | YES  |     | NULL    |       |
+| job_title  | varchar(20)  | YES  |     |         |       |
+| min_salary | decimal(7,2) | YES  |     | NULL    |       |
+| max_salary | decimal(7,2) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table jobs_default
+    -> modify column min_salary decimal(7,2) default 8000;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table jobs_default
+    -> modify column max_salary decimal(7,2) default null;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc jobs_default;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int          | YES  |     | NULL    |       |
+| job_title  | varchar(20)  | YES  |     |         |       |
+| min_salary | decimal(7,2) | YES  |     | 8000.00 |       |
+| max_salary | decimal(7,2) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+Q7. 
+
+mysql> create table departments (
+    -> department_id decimal(4,0),
+    -> department_name varchar(30),
+    -> ^C
+mysql> create table departments (
+    -> department_id decimal(4,0),
+    -> department_name varchar(30) not null,
+    -> manager_id decimal(6,0),
+    -> location_id decimal(4,0),
+    -> primary key (department_id , manager_id));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| department_id   | decimal(4,0) | NO   | PRI | NULL    |       |
+| department_name | varchar(30)  | NO   |     | NULL    |       |
+| manager_id      | decimal(6,0) | NO   | PRI | NULL    |       |
+| location_id     | decimal(4,0) | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+Q8.
+
+mysql> create table employees(
+    -> emp_id int,f_name varchar(50),l_name varchar(50),email varchar(100),
+    -> phone_no varchar(20),hire_date date,job_id int,
+    -> salary decimal(10,2),
+    -> commision decimal(10,2),
+    -> manager id int,
+    -> ^C
+mysql> create table employees(
+    -> emp_id int,f_name varchar(50),l_name varchar(50),email varchar(100),
+    -> phone_no varchar(20),hire_date date,job_id int,
+    -> salary decimal(10,2),
+    -> commision decimal(10,2),
+    -> manager_id int,
+    -> department_id int,);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 7
+mysql> create table employees(
+    -> emp_id int,f_name varchar(50),l_name varchar(50),email varchar(100),
+    -> phone_no varchar(20),hire_date date,job_id int,
+    -> salary decimal(10,2),
+    -> commision decimal(10,2),
+    -> manager_id int,
+    -> department_id int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table employees add primary key (emp_id);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees add foreign key (department_id)
+    -> references departments(department_id);
+ERROR 3780 (HY000): Referencing column 'department_id' and referenced column 'department_id' in foreign key constraint 'employees_ibfk_1' are incompatible.
+mysql> alter table employees modify column department_id decimal(4,0);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees modify column manager_id decimal(6,0);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees add foreign key (department_id,manager_id)
+    -> references departments(department_id,manager_id);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employees;
++---------------+---------------+------+-----+---------+-------+
+| Field         | Type          | Null | Key | Default | Extra |
++---------------+---------------+------+-----+---------+-------+
+| emp_id        | int           | NO   | PRI | NULL    |       |
+| f_name        | varchar(50)   | YES  |     | NULL    |       |
+| l_name        | varchar(50)   | YES  |     | NULL    |       |
+| email         | varchar(100)  | YES  |     | NULL    |       |
+| phone_no      | varchar(20)   | YES  |     | NULL    |       |
+| hire_date     | date          | YES  |     | NULL    |       |
+| job_id        | int           | YES  |     | NULL    |       |
+| salary        | decimal(10,2) | YES  |     | NULL    |       |
+| commision     | decimal(10,2) | YES  |     | NULL    |       |
+| manager_id    | decimal(6,0)  | YES  |     | NULL    |       |
+| department_id | decimal(4,0)  | YES  | MUL | NULL    |       |
++---------------+---------------+------+-----+---------+-------+
+11 rows in set (0.00 sec)
+
+Q9.
+
+mysql> create table department_managers(
+    ->  department_id decimal(4,0),
+    ->  manager_id decimal(6,0),
+    -> manager_name varchar(50) not null);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc department_managers;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| department_id | decimal(4,0) | YES  |     | NULL    |       |
+| manager_id    | decimal(6,0) | YES  |     | NULL    |       |
+| manager_name  | varchar(50)  | NO   |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table department_managers
+    -> add primary key (department_id,manager_id);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc department_managers;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| department_id | decimal(4,0) | NO   | PRI | NULL    |       |
+| manager_id    | decimal(6,0) | NO   | PRI | NULL    |       |
+| manager_name  | varchar(50)  | NO   |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table employees add foreign key (department_id,manager_id)
+    ->     -> references departments(department_id,manager_id);^C
+mysql>  alter table employees add foreign key (department_id,manager_id)
+    ->  references department_managers(department_id,manager_id);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employees;
++---------------+---------------+------+-----+---------+-------+
+| Field         | Type          | Null | Key | Default | Extra |
++---------------+---------------+------+-----+---------+-------+
+| emp_id        | int           | NO   | PRI | NULL    |       |
+| f_name        | varchar(50)   | YES  |     | NULL    |       |
+| l_name        | varchar(50)   | YES  |     | NULL    |       |
+| email         | varchar(100)  | YES  |     | NULL    |       |
+| phone_no      | varchar(20)   | YES  |     | NULL    |       |
+| hire_date     | date          | YES  |     | NULL    |       |
+| job_id        | int           | YES  |     | NULL    |       |
+| salary        | decimal(10,2) | YES  |     | NULL    |       |
+| commision     | decimal(10,2) | YES  |     | NULL    |       |
+| manager_id    | decimal(6,0)  | YES  |     | NULL    |       |
+| department_id | decimal(4,0)  | YES  | MUL | NULL    |       |
++---------------+---------------+------+-----+---------+-------+
+11 rows in set (0.00 sec)
+
+mysql> show create table employees;
++-----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table     | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
++-----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| employees | CREATE TABLE `employees` (
+  `emp_id` int NOT NULL,
+  `f_name` varchar(50) DEFAULT NULL,
+  `l_name` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone_no` varchar(20) DEFAULT NULL,
+  `hire_date` date DEFAULT NULL,
+  `job_id` int DEFAULT NULL,
+  `salary` decimal(10,2) DEFAULT NULL,
+  `commision` decimal(10,2) DEFAULT NULL,
+  `manager_id` decimal(6,0) DEFAULT NULL,
+  `department_id` decimal(4,0) DEFAULT NULL,
+  PRIMARY KEY (`emp_id`),
+  KEY `department_id` (`department_id`,`manager_id`),
+  CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`department_id`, `manager_id`) REFERENCES `departments` (`department_id`, `manager_id`),
+  CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`department_id`, `manager_id`) REFERENCES `department_managers` (`department_id`, `manager_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> exit;

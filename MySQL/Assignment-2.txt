@@ -1,0 +1,480 @@
+mysql> use sql_2;
+Database changed
+mysql> create table member (
+    -> mem_id int,
+    -> mem_name varchar(30),
+    -> mem_address varchar(50),
+    -> acc_open_date date,
+    -> membership_type varchar(20),
+    -> fees_paid decimal(10,2),
+    -> max_books_allowed int,
+    -> penalty_amount decimal(10,2));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table books (
+    -> book_no int,
+    -> book_name varchar(30),
+    -> author_name varchar(30),
+    -> cost decimal(10,2),
+    -> category varchar(25));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table issue (
+    -> lib_issue_id int,
+    -> book_no int,
+    -> mem_id int,
+    -> issue_date date,
+    -> return_date date);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc member;
++-------------------+---------------+------+-----+---------+-------+
+| Field             | Type          | Null | Key | Default | Extra |
++-------------------+---------------+------+-----+---------+-------+
+| mem_id            | int           | YES  |     | NULL    |       |
+| mem_name          | varchar(30)   | YES  |     | NULL    |       |
+| mem_address       | varchar(50)   | YES  |     | NULL    |       |
+| acc_open_date     | date          | YES  |     | NULL    |       |
+| membership_type   | varchar(20)   | YES  |     | NULL    |       |
+| fees_paid         | decimal(10,2) | YES  |     | NULL    |       |
+| max_books_allowed | int           | YES  |     | NULL    |       |
+| penalty_amount    | decimal(10,2) | YES  |     | NULL    |       |
++-------------------+---------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+
+mysql> desc books;
++-------------+---------------+------+-----+---------+-------+
+| Field       | Type          | Null | Key | Default | Extra |
++-------------+---------------+------+-----+---------+-------+
+| book_no     | int           | YES  |     | NULL    |       |
+| book_name   | varchar(30)   | YES  |     | NULL    |       |
+| author_name | varchar(30)   | YES  |     | NULL    |       |
+| cost        | decimal(10,2) | YES  |     | NULL    |       |
+| category    | varchar(25)   | YES  |     | NULL    |       |
++-------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc issue;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| lib_issue_id | int  | YES  |     | NULL    |       |
+| book_no      | int  | YES  |     | NULL    |       |
+| mem_id       | int  | YES  |     | NULL    |       |
+| issue_date   | date | YES  |     | NULL    |       |
+| return_date  | date | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> drop table member;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table member (
+    -> mem_id int primary key,
+    -> mem_name varchar(30),
+    -> mem_address varchar(50),
+    -> acc_open_date date,
+    -> membership_type varchar(20),
+    -> fees_paid decimal(10,2),
+    -> max_books_allowed int,
+    -> penalty_amount decimal(10,2),
+    -> check membership_type in ("lifetime","annual","half yeraly","quarterly"));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'membership_type in ("lifetime","annual","half yeraly","quarterly"))' at line 10
+mysql> create table member (
+    -> mem_id int primary key,
+    -> mem_name varchar(30),
+    -> mem_address varchar(50),
+    -> acc_open_date date,
+    -> membership_type varchar(20),
+    -> fees_paid decimal(10,2),
+    ->
+    ->
+    -> max_books_allowed int,
+    -> penalty_amount decimal(10,2),
+    -> check (membership_type in ("lifetime","annual","half yeraly","quarterly")));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table member modify column mem_name varchar(40);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table issue add column reference varchar(30);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc issue;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| lib_issue_id | int         | YES  |     | NULL    |       |
+| book_no      | int         | YES  |     | NULL    |       |
+| mem_id       | int         | YES  |     | NULL    |       |
+| issue_date   | date        | YES  |     | NULL    |       |
+| return_date  | date        | YES  |     | NULL    |       |
+| reference    | varchar(30) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table issue drop column reference;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc issue;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| lib_issue_id | int  | YES  |     | NULL    |       |
+| book_no      | int  | YES  |     | NULL    |       |
+| mem_id       | int  | YES  |     | NULL    |       |
+| issue_date   | date | YES  |     | NULL    |       |
+| return_date  | date | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> rename table issue to lib_issue;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into member values
+    -> (1,"richa sharma","pune","10-2-05","lifetime",25000,5,50),
+    -> (2,"garima sen","pune",current_date,"annual",1000,3,null);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> table member;
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name     | mem_address | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+
+|      1 | richa sharma | pune        | 2010-02-05    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      2 | garima sen   | pune        | 2026-03-10    | annual          |   1000.00 |                 3 |           NULL |
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+
+2 rows in set (0.01 sec)
+
+mysql> insert into member values
+    -> (3,"richa ghossh","banglore","10-2-10","half yearly",5000,2,0),
+    -> (4,"harshal bade","neral","10-5-5","half yearly",50000,100,0),
+    -> (4,"aditya surase","sambhaji nagar","26-5-12","quarterly",3000,5,500),
+    -> ^C
+mysql> insert into member values
+    -> (3,"richa ghossh","banglore","10-2-10","half yearly",5000,2,0),
+    -> (4,"harshal bade","neral","10-5-5","half yearly",50000,100,0),
+    -> (5,"aditya surase","sambhaji nagar","26-5-12","quarterly",3000,5,500),
+    -> (6,"sanket suryawanshi","pune","25-5-10","half yearly",500,1,400),
+    -> (7,"vishal gadiwan","pune","26-1-12","quarterly",0,0,2000);
+ERROR 3819 (HY000): Check constraint 'member_chk_1' is violated.
+mysql> insert into member values
+    -> (3,"richa ghossh","banglore","10-2-10","half yearly",5000,2,0),
+    -> (4,"harshal bade","neral","10-5-5","half yearly",50000,100,0),
+    -> ^C
+mysql> insert into member values
+    -> (3,"richa ghossh","banglore","10-2-10","half yeraly",5000,2,0),
+    -> (4,"harshal bade","neral","10-5-5","half yeraly",50000,100,0),
+    -> (5,"aditya surase","sambhaji nagar","26-5-12","quarterly",3000,5,500),
+    -> (6,"sanket suryawanshi","pune","25-5-10","annual",500,1,400),
+    -> (7,"vishal gadiwan","pune","26-1-12","quarterly",0,0,2000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> table member;
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name           | mem_address    | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|      1 | richa sharma       | pune           | 2010-02-05    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      2 | garima sen         | pune           | 2026-03-10    | annual          |   1000.00 |                 3 |           NULL |
+|      3 | richa ghossh       | banglore       | 2010-02-10    | half yeraly     |   5000.00 |                 2 |           0.00 |
+|      4 | harshal bade       | neral          | 2010-05-05    | half yeraly     |  50000.00 |               100 |           0.00 |
+|      5 | aditya surase      | sambhaji nagar | 2026-05-12    | quarterly       |   3000.00 |                 5 |         500.00 |
+|      6 | sanket suryawanshi | pune           | 2025-05-10    | annual          |    500.00 |                 1 |         400.00 |
+|      7 | vishal gadiwan     | pune           | 2026-01-12    | quarterly       |      0.00 |                 0 |        2000.00 |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> alter table member modify column mem_name varchar(20);
+Query OK, 7 rows affected (0.06 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> table member;
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name           | mem_address    | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|      1 | richa sharma       | pune           | 2010-02-05    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      2 | garima sen         | pune           | 2026-03-10    | annual          |   1000.00 |                 3 |           NULL |
+|      3 | richa ghossh       | banglore       | 2010-02-10    | half yeraly     |   5000.00 |                 2 |           0.00 |
+|      4 | harshal bade       | neral          | 2010-05-05    | half yeraly     |  50000.00 |               100 |           0.00 |
+|      5 | aditya surase      | sambhaji nagar | 2026-05-12    | quarterly       |   3000.00 |                 5 |         500.00 |
+|      6 | sanket suryawanshi | pune           | 2025-05-10    | annual          |    500.00 |                 1 |         400.00 |
+|      7 | vishal gadiwan     | pune           | 2026-01-12    | quarterly       |      0.00 |                 0 |        2000.00 |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> desc member;
++-------------------+---------------+------+-----+---------+-------+
+| Field             | Type          | Null | Key | Default | Extra |
++-------------------+---------------+------+-----+---------+-------+
+| mem_id            | int           | NO   | PRI | NULL    |       |
+| mem_name          | varchar(20)   | YES  |     | NULL    |       |
+| mem_address       | varchar(50)   | YES  |     | NULL    |       |
+| acc_open_date     | date          | YES  |     | NULL    |       |
+| membership_type   | varchar(20)   | YES  |     | NULL    |       |
+| fees_paid         | decimal(10,2) | YES  |     | NULL    |       |
+| max_books_allowed | int           | YES  |     | NULL    |       |
+| penalty_amount    | decimal(10,2) | YES  |     | NULL    |       |
++-------------------+---------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> alter table member modify column check( max_books_allowed <100);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check( max_books_allowed <100)' at line 1
+mysql> alter table member modify column check( max_books_allowed <=100);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check( max_books_allowed <=100)' at line 1
+mysql> alter table member modify column max_books_allowed int check( max_books_allowed <100);
+ERROR 3819 (HY000): Check constraint 'member_chk_2' is violated.
+mysql> alter table member modify column max_books_allowed int check( max_books_allowed <=100);
+Query OK, 7 rows affected (0.06 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> show create table member;
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| member | CREATE TABLE `member` (
+  `mem_id` int NOT NULL,
+  `mem_name` varchar(20) DEFAULT NULL,
+  `mem_address` varchar(50) DEFAULT NULL,
+  `acc_open_date` date DEFAULT NULL,
+  `membership_type` varchar(20) DEFAULT NULL,
+  `fees_paid` decimal(10,2) DEFAULT NULL,
+  `max_books_allowed` int DEFAULT NULL,
+  `penalty_amount` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`mem_id`),
+  CONSTRAINT `member_chk_1` CHECK ((`membership_type` in (_utf8mb4'lifetime',_utf8mb4'annual',_utf8mb4'half yeraly',_utf8mb4'quarterly'))),
+  CONSTRAINT `member_chk_2` CHECK ((`max_books_allowed` <= 100))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> create table member_backup
+    -> as
+    -> select * from member;
+Query OK, 7 rows affected (0.03 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> show create table member_backup;
++---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table         | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                   |
++---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| member_backup | CREATE TABLE `member_backup` (
+  `mem_id` int NOT NULL,
+  `mem_name` varchar(20) DEFAULT NULL,
+  `mem_address` varchar(50) DEFAULT NULL,
+  `acc_open_date` date DEFAULT NULL,
+  `membership_type` varchar(20) DEFAULT NULL,
+  `fees_paid` decimal(10,2) DEFAULT NULL,
+  `max_books_allowed` int DEFAULT NULL,
+  `penalty_amount` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table member_backup modify column max_books_allowed int check( max_books_allowed <=100),
+    -> alter table member_backup modify column penalty_amount decimal(10,2) check( penalty_amount <= 2000);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table member_backup modify column penalty_amount decimal(10,2) check( penalty_am' at line 2
+mysql> alter table member_backup modify column max_books_allowed int check( max_books_allowed <=100),
+    -> modify column penalty_amount decimal(10,2) check( penalty_amount <= 2000);
+Query OK, 7 rows affected (0.05 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> show create table member_backup;
++---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table         | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
++---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| member_backup | CREATE TABLE `member_backup` (
+  `mem_id` int NOT NULL,
+  `mem_name` varchar(20) DEFAULT NULL,
+  `mem_address` varchar(50) DEFAULT NULL,
+  `acc_open_date` date DEFAULT NULL,
+  `membership_type` varchar(20) DEFAULT NULL,
+  `fees_paid` decimal(10,2) DEFAULT NULL,
+  `max_books_allowed` int DEFAULT NULL,
+  `penalty_amount` decimal(10,2) DEFAULT NULL,
+  CONSTRAINT `member_backup_chk_1` CHECK ((`max_books_allowed` <= 100)),
+  CONSTRAINT `member_backup_chk_2` CHECK ((`penalty_amount` <= 2000))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> drop table books;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc books;
+ERROR 1146 (42S02): Table 'sql_2.books' doesn't exist
+mysql> create table books (
+    -> book_no int primary key,
+    -> book_name varchar(20) not null,
+    -> author_name varchar(20),
+    -> cost decimal (10,2),
+    -> category varchar(15),
+    ->
+    -> check ( category in ("science","fiction","database","rdbms","others")));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table books;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table books (
+    -> book_no int primary key,
+    -> book_name varchar(20) not null,
+    -> author_name varchar(20),
+    -> cost decimal (10,2),
+    -> category varchar(15),
+    -> check ( category in ("system","science","fiction","database","rdbms","others")));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into books values
+    -> (101,"let us c","denis ritchie",450,"system"),
+    -> (102,"oracle complete ref","loni",550,"database"),
+    -> (103,"mastering sql","loni",250,"database"),
+    -> (104,"pl sql ref","scott urman",750,"database"),
+    -> (105,"national geography","adis scott",1000,"science");
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from member;
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name           | mem_address    | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|      1 | richa sharma       | pune           | 2010-02-05    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      2 | garima sen         | pune           | 2026-03-10    | annual          |   1000.00 |                 3 |           NULL |
+|      3 | richa ghossh       | banglore       | 2010-02-10    | half yeraly     |   5000.00 |                 2 |           0.00 |
+|      4 | harshal bade       | neral          | 2010-05-05    | half yeraly     |  50000.00 |               100 |           0.00 |
+|      5 | aditya surase      | sambhaji nagar | 2026-05-12    | quarterly       |   3000.00 |                 5 |         500.00 |
+|      6 | sanket suryawanshi | pune           | 2025-05-10    | annual          |    500.00 |                 1 |         400.00 |
+|      7 | vishal gadiwan     | pune           | 2026-01-12    | quarterly       |      0.00 |                 0 |        2000.00 |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+7 rows in set (0.01 sec)
+
+mysql> select * from books;
++---------+---------------------+---------------+---------+----------+
+| book_no | book_name           | author_name   | cost    | category |
++---------+---------------------+---------------+---------+----------+
+|     101 | let us c            | denis ritchie |  450.00 | system   |
+|     102 | oracle complete ref | loni          |  550.00 | database |
+|     103 | mastering sql       | loni          |  250.00 | database |
+|     104 | pl sql ref          | scott urman   |  750.00 | database |
+|     105 | national geography  | adis scott    | 1000.00 | science  |
++---------+---------------------+---------------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> drop table lib_issue;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table issue (
+    -> lib_issue_id int primary key,
+    -> book_no int foreign key references books(book_id),
+    -> mem_id int foreign key references member(mem_id),
+    -> issue_date date);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key references books(book_id),
+mem_id int foreign key references member(' at line 3
+mysql> create table issue (
+    -> lib_issue_id int primary key,
+    -> book_no int,
+    -> mem_id int,
+    -> issue_date date),
+    -> ^C
+mysql> create table issue (
+    -> lib_issue_id int primary key,
+    -> book_no int,
+    -> mem_id int,
+    -> issue_date date,
+    ->
+    -> foreign key (book_no) references books(book_id),
+    -> foreign key (mem_id) references member(mem_id));
+ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'book_id' for constraint 'issue_ibfk_1' in the referenced table 'books'
+mysql> create table issue (
+    -> lib_issue_id int primary key,
+    -> book_no int,
+    -> mem_id int,
+    -> issue_date date,
+    -> foreign key (book_no) references books(book_no),
+    -> foreign key (mem_id) references member(mem_id));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into issue values
+    -> (7001,101,1,"24-12-10"),
+    -> (7002,102,2,"24-12-25"),
+    -> (7003,104,1,"25-1-15"),
+    -> (7004,101,1,"25-2-4"),
+    -> (7005,104,2,"25-3-15"),
+    -> (7006,101,3,"25-4-18");
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> table issue;
++--------------+---------+--------+------------+
+| lib_issue_id | book_no | mem_id | issue_date |
++--------------+---------+--------+------------+
+|         7001 |     101 |      1 | 2024-12-10 |
+|         7002 |     102 |      2 | 2024-12-25 |
+|         7003 |     104 |      1 | 2025-01-15 |
+|         7004 |     101 |      1 | 2025-02-04 |
+|         7005 |     104 |      2 | 2025-03-15 |
+|         7006 |     101 |      3 | 2025-04-18 |
++--------------+---------+--------+------------+
+6 rows in set (0.00 sec)
+
+mysql> insert into issue values
+    -> (7007,101,13,"24-12-10");
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`sql_2`.`issue`, CONSTRAINT `issue_ibfk_2` FOREIGN KEY (`mem_id`) REFERENCES `member` (`mem_id`))
+mysql> delete from member where mem_id=1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`sql_2`.`issue`, CONSTRAINT `issue_ibfk_2` FOREIGN KEY (`mem_id`) REFERENCES `member` (`mem_id`))
+mysql> update issue set issue_date = issue_date + interval 15 day where id=7004 or id =7005;
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update issue set issue_date = issue_date + interval 15 day where lib_issue_id=7004 or id =7005;
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update issue set issue_date = issue_date + interval 15 day where lib_issue_id=7004 or lib_issue_id =7005;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> table issue;
++--------------+---------+--------+------------+
+| lib_issue_id | book_no | mem_id | issue_date |
++--------------+---------+--------+------------+
+|         7001 |     101 |      1 | 2024-12-10 |
+|         7002 |     102 |      2 | 2024-12-25 |
+|         7003 |     104 |      1 | 2025-01-15 |
+|         7004 |     101 |      1 | 2025-02-19 |
+|         7005 |     104 |      2 | 2025-03-30 |
+|         7006 |     101 |      3 | 2025-04-18 |
++--------------+---------+--------+------------+
+6 rows in set (0.00 sec)
+
+mysql> delete from issue where mem_id =1 and issue_date < "06-12-10";
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> table issue;
++--------------+---------+--------+------------+
+| lib_issue_id | book_no | mem_id | issue_date |
++--------------+---------+--------+------------+
+|         7001 |     101 |      1 | 2024-12-10 |
+|         7002 |     102 |      2 | 2024-12-25 |
+|         7003 |     104 |      1 | 2025-01-15 |
+|         7004 |     101 |      1 | 2025-02-19 |
+|         7005 |     104 |      2 | 2025-03-30 |
+|         7006 |     101 |      3 | 2025-04-18 |
++--------------+---------+--------+------------+
+6 rows in set (0.00 sec)
+
+mysql> delete from books where category != "database" or catagory != "rdbms";
+ERROR 1054 (42S22): Unknown column 'catagory' in 'where clause'
+mysql> delete from books where category != "database" or category != "rdbms";
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`sql_2`.`issue`, CONSTRAINT `issue_ibfk_1` FOREIGN KEY (`book_no`) REFERENCES `books` (`book_no`))
+mysql> drop table member,books,issue;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_sql_2 |
++-----------------+
+| member_backup   |
++-----------------+
+1 row in set (0.02 sec)
+
+mysql> exit;
