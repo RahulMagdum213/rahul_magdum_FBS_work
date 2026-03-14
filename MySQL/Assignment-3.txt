@@ -1,0 +1,303 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| first              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sql_1              |
+| sql_2              |
+| sys                |
++--------------------+
+7 rows in set (0.19 sec)
+
+mysql> create database sql_3;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use sql_3;
+Database changed
+mysql> create table employee(
+    -> emp_id int primary key auto_increment,
+    -> first_name varchar(20),
+    -> last_name varchar(20),
+    -> job_id int,
+    -> salary decimal(7,2),
+    -> manager_id int,
+    -> dept_id int)auto_increment = 100;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into employee(first_name,last_name,job_id,salary,manager_id,dept_id)
+    -> values
+    -> ("steven","king",1,24000,200,10),
+    -> ("neeha","kochhar",2,17000,200,10),
+    -> ("lex","de haan",2,17000,200,10),
+    -> ("alexander","hunold",3,9000,103,60),
+    -> ("bruce","ernst",3,6000,103,60),
+    -> ("david","austin",3,4800,103,60),
+    -> ("valli","pataballa",3,4800,103,60),
+    -> ("diana","lorentz",3,4200,114,30),
+    -> ("nancy","greenberg",4,12000,145,80),
+    -> ("daniel","faviet",4,9000,145,80);
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> table employee;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 24000.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 17000.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 17000.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 |  9000.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  6000.00 |        103 |      60 |
+|    105 | david      | austin    |      3 |  4800.00 |        103 |      60 |
+|    106 | valli      | pataballa |      3 |  4800.00 |        103 |      60 |
+|    107 | diana      | lorentz   |      3 |  4200.00 |        114 |      30 |
+|    108 | nancy      | greenberg |      4 | 12000.00 |        145 |      80 |
+|    109 | daniel     | faviet    |      4 |  9000.00 |        145 |      80 |
++--------+------------+-----------+--------+----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> create table department(
+    -> dept_id int,dept_name varchar(20),manager_id int,location_id int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into department values(10,"administration",200,1700),
+    -> (20,"marketing",201,1800),
+    -> (30,"purchasing",114,1700),
+    -> (60,"it",103,1400),
+    -> (80,"sales",145,2500);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> rename table department to departments;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> table departments;
++---------+----------------+------------+-------------+
+| dept_id | dept_name      | manager_id | location_id |
++---------+----------------+------------+-------------+
+|      10 | administration |        200 |        1700 |
+|      20 | marketing      |        201 |        1800 |
+|      30 | purchasing     |        114 |        1700 |
+|      60 | it             |        103 |        1400 |
+|      80 | sales          |        145 |        2500 |
++---------+----------------+------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> create table jobs(
+    -> job_id int,job_title varchar(20),min_salary decimal(7,2),max _salary decimal(7,2));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_salary decimal(7,2))' at line 2
+mysql> create table jobs(
+    -> job_id int,job_title varchar(20),min_salary decimal(7,2),max_salary decimal(7,2));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into jobs values
+    -> (1,"president",20000,40000),
+    -> (2,"administration vice president",15000,30000),
+    -> (3,"programmer",4000,10000),
+    -> (4,"sales manager",10000,20000);
+ERROR 1406 (22001): Data too long for column 'job_title' at row 2
+mysql> alter table jobs modify column job_title varchar(40);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into jobs values
+    -> (1,"president",20000,40000),
+    -> (2,"administration vice president",15000,30000),
+    -> (3,"programmer",4000,10000),
+    -> (4,"sales manager",10000,20000);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> table jobs;
++--------+-------------------------------+------------+------------+
+| job_id | job_title                     | min_salary | max_salary |
++--------+-------------------------------+------------+------------+
+|      1 | president                     |   20000.00 |   40000.00 |
+|      2 | administration vice president |   15000.00 |   30000.00 |
+|      3 | programmer                    |    4000.00 |   10000.00 |
+|      4 | sales manager                 |   10000.00 |   20000.00 |
++--------+-------------------------------+------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> alter table jobs modify column job_id int unique;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into jobs values
+    -> (5,"hr",2000,4000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> Q-3
+    -> ^C
+mysql> Q-3^C
+mysql> table jobs;
++--------+-------------------------------+------------+------------+
+| job_id | job_title                     | min_salary | max_salary |
++--------+-------------------------------+------------+------------+
+|      1 | president                     |   20000.00 |   40000.00 |
+|      2 | administration vice president |   15000.00 |   30000.00 |
+|      3 | programmer                    |    4000.00 |   10000.00 |
+|      4 | sales manager                 |   10000.00 |   20000.00 |
+|      5 | hr                            |    2000.00 |    4000.00 |
++--------+-------------------------------+------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> update employee set salary=salary*1.1;
+Query OK, 10 rows affected (0.01 sec)
+Rows matched: 10  Changed: 10  Warnings: 0
+
+mysql> table employee;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 26400.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 18700.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 18700.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 |  9900.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  6600.00 |        103 |      60 |
+|    105 | david      | austin    |      3 |  5280.00 |        103 |      60 |
+|    106 | valli      | pataballa |      3 |  5280.00 |        103 |      60 |
+|    107 | diana      | lorentz   |      3 |  4620.00 |        114 |      30 |
+|    108 | nancy      | greenberg |      4 | 13200.00 |        145 |      80 |
+|    109 | daniel     | faviet    |      4 |  9900.00 |        145 |      80 |
++--------+------------+-----------+--------+----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> Q5  ^C
+mysql> update employee set email=null where dept_id = 80;
+ERROR 1054 (42S22): Unknown column 'email' in 'field list'
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> Q6  ^C
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> Q 7   ^C
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> Q 8    ^C
+mysql> update employee set salary = salary+2000 where dept_id = 60;
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> delete from employee where salary <5000;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values.
+    -> ^C
+mysql> insert into employee values
+    -> ("harshal","bade",1,30000,114,30);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> table employee;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 26400.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 18700.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 18700.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 | 11900.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  8600.00 |        103 |      60 |
+|    105 | david      | austin    |      3 |  7280.00 |        103 |      60 |
+|    106 | valli      | pataballa |      3 |  7280.00 |        103 |      60 |
+|    108 | nancy      | greenberg |      4 | 13200.00 |        145 |      80 |
+|    109 | daniel     | faviet    |      4 |  9900.00 |        145 |      80 |
++--------+------------+-----------+--------+----------+------------+---------+
+9 rows in set (0.00 sec)
+
+mysql> insert into employee values
+    -> (110,"harshal","bade",1,30000,114,30);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> table employee;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 26400.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 18700.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 18700.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 | 11900.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  8600.00 |        103 |      60 |
+|    105 | david      | austin    |      3 |  7280.00 |        103 |      60 |
+|    106 | valli      | pataballa |      3 |  7280.00 |        103 |      60 |
+|    108 | nancy      | greenberg |      4 | 13200.00 |        145 |      80 |
+|    109 | daniel     | faviet    |      4 |  9900.00 |        145 |      80 |
+|    110 | harshal    | bade      |      1 | 30000.00 |        114 |      30 |
++--------+------------+-----------+--------+----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> update employee set manager_id=300 where dept_id=80;
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> table employee;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 26400.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 18700.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 18700.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 | 11900.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  8600.00 |        103 |      60 |
+|    105 | david      | austin    |      3 |  7280.00 |        103 |      60 |
+|    106 | valli      | pataballa |      3 |  7280.00 |        103 |      60 |
+|    108 | nancy      | greenberg |      4 | 13200.00 |        300 |      80 |
+|    109 | daniel     | faviet    |      4 |  9900.00 |        300 |      80 |
+|    110 | harshal    | bade      |      1 | 30000.00 |        114 |      30 |
++--------+------------+-----------+--------+----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> table department;
+ERROR 1146 (42S02): Table 'sql_3.department' doesn't exist
+mysql> table departments;
++---------+----------------+------------+-------------+
+| dept_id | dept_name      | manager_id | location_id |
++---------+----------------+------------+-------------+
+|      10 | administration |        200 |        1700 |
+|      20 | marketing      |        201 |        1800 |
+|      30 | purchasing     |        114 |        1700 |
+|      60 | it             |        103 |        1400 |
+|      80 | sales          |        145 |        2500 |
++---------+----------------+------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> delete from departments where dept_id =20;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> table departments;
++---------+----------------+------------+-------------+
+| dept_id | dept_name      | manager_id | location_id |
++---------+----------------+------------+-------------+
+|      10 | administration |        200 |        1700 |
+|      30 | purchasing     |        114 |        1700 |
+|      60 | it             |        103 |        1400 |
+|      80 | sales          |        145 |        2500 |
++---------+----------------+------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql>
