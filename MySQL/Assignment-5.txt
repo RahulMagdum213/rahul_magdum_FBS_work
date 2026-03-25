@@ -1,0 +1,418 @@
+mysql> ASSIGNMENT-5   ^C
+mysql> use sql_2;
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_sql_2 |
++-----------------+
+| books           |
+| issue           |
+| member          |
+| member_backup   |
++-----------------+
+4 rows in set (0.00 sec)
+mysql> table member;
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name           | mem_address    | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|      1 | richa sharma       | pune           | 2005-02-10    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      2 | garima sen         | pune           | 2026-03-20    | annual          |   1000.00 |                 3 |           NULL |
+|      3 | richa ghossh       | bangalore      | 2010-02-10    | half yearly     |   5000.00 |                 2 |           0.00 |
+|      4 | harshal bade       | neral          | 2005-05-10    | half yearly     |  50000.00 |               100 |           0.00 |
+|      5 | aditya surase      | sambhaji nagar | 2012-05-26    | quarterly       |   3000.00 |                 5 |         500.00 |
+|      6 | sanket suryawanshi | pune           | 2010-05-25    | annual          |    500.00 |                 1 |         400.00 |
+|      7 | vishal gadiwan     | pune           | 2012-01-26    | quarterly       |      0.00 |                 0 |        2000.00 |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> table books;
++---------+---------------------+---------------+---------+----------+
+| book_no | book_name           | author_name   | cost    | category |
++---------+---------------------+---------------+---------+----------+
+|     101 | let us c            | denis ritchie |  450.00 | system   |
+|     102 | oracle complete ref | loni          |  550.00 | database |
+|     103 | mastering sql       | loni          |  250.00 | database |
+|     104 | pl sql ref          | scott urman   |  750.00 | database |
+|     105 | national geography  | adis scott    | 1000.00 | science  |
++---------+---------------------+---------------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> table issue;
++--------------+---------+--------+------------+
+| lib_issue_id | book_no | mem_id | issue_date |
++--------------+---------+--------+------------+
+|         7001 |     101 |      1 | 2010-12-24 |
+|         7002 |     102 |      2 | 2012-12-25 |
+|         7003 |     104 |      1 | 2015-01-25 |
+|         7004 |     101 |      1 | 2015-02-04 |
+|         7005 |     104 |      2 | 2015-03-25 |
+|         7006 |     101 |      3 | 2015-04-18 |
++--------------+---------+--------+------------+
+6 rows in set (0.00 sec)
+mysql> Q1   ^C
+
+mysql> select * from books where author_name = "loni" and cost < 600;
++---------+---------------------+-------------+--------+----------+
+| book_no | book_name           | author_name | cost   | category |
++---------+---------------------+-------------+--------+----------+
+|     102 | oracle complete ref | loni        | 550.00 | database |
+|     103 | mastering sql       | loni        | 250.00 | database |
++---------+---------------------+-------------+--------+----------+
+2 rows in set (0.01 sec)
+mysql> Q2  ^C
+mysql> alter table issue add column returned_date date;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> table issue;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | NULL          |
+|         7002 |     102 |      2 | 2012-12-25 | NULL          |
+|         7003 |     104 |      1 | 2015-01-25 | NULL          |
+|         7004 |     101 |      1 | 2015-02-04 | NULL          |
+|         7005 |     104 |      2 | 2015-03-25 | NULL          |
+|         7006 |     101 |      3 | 2015-04-18 | NULL          |
++--------------+---------+--------+------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> update issue set returned_date = add_date(issue_date,10);
+ERROR 1305 (42000): FUNCTION sql_2.add_date does not exist
+mysql> update issue set returned_date = adddate(issue_date,10);
+Query OK, 6 rows affected (0.01 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+mysql> table issue;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | 2011-01-03    |
+|         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |
+|         7003 |     104 |      1 | 2015-01-25 | 2015-02-04    |
+|         7004 |     101 |      1 | 2015-02-04 | 2015-02-14    |
+|         7005 |     104 |      2 | 2015-03-25 | 2015-04-04    |
+|         7006 |     101 |      3 | 2015-04-18 | 2015-04-28    |
++--------------+---------+--------+------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> update issue set returned_date = null where id in (7003,7005);
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update issue set returned_date = null where lib_issue_id in (7003,7005);
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> table issue;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | 2011-01-03    |
+|         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |
+|         7003 |     104 |      1 | 2015-01-25 | NULL          |
+|         7004 |     101 |      1 | 2015-02-04 | 2015-02-14    |
+|         7005 |     104 |      2 | 2015-03-25 | NULL          |
+|         7006 |     101 |      3 | 2015-04-18 | 2015-04-28    |
++--------------+---------+--------+------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from issue where returned_date is null;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7003 |     104 |      1 | 2015-01-25 | NULL          |
+|         7005 |     104 |      2 | 2015-03-25 | NULL          |
++--------------+---------+--------+------------+---------------+
+2 rows in set (0.00 sec)
+mysql> Q3   ^C
+mysql> update issue set returned_date = "25-12-31"
+    -> where returned_date is null and lib_issue_id not in (7005,7006);
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> table issue;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | 2011-01-03    |
+|         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |
+|         7003 |     104 |      1 | 2015-01-25 | 2025-12-31    |
+|         7004 |     101 |      1 | 2015-02-04 | 2015-02-14    |
+|         7005 |     104 |      2 | 2015-03-25 | NULL          |
+|         7006 |     101 |      3 | 2015-04-18 | 2015-04-28    |
++--------------+---------+--------+------------+---------------+
+6 rows in set (0.00 sec)
+mysql> Q4   ^C
+mysql> select * from issue where datediff(current_date,issued_date)>30;
+ERROR 1054 (42S22): Unknown column 'issued_date' in 'where clause'
+mysql> select * from issue where datediff(current_date,issue_date)>30;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | 2011-01-03    |
+|         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |
+|         7003 |     104 |      1 | 2015-01-25 | 2025-12-31    |
+|         7004 |     101 |      1 | 2015-02-04 | 2015-02-14    |
+|         7005 |     104 |      2 | 2015-03-25 | NULL          |
+|         7006 |     101 |      3 | 2015-04-18 | 2015-04-28    |
++--------------+---------+--------+------------+---------------+
+6 rows in set (0.00 sec)
+mysql> Q5   ^C
+mysql>
+mysql> table books;
++---------+---------------------+---------------+---------+----------+
+| book_no | book_name           | author_name   | cost    | category |
++---------+---------------------+---------------+---------+----------+
+|     101 | let us c            | denis ritchie |  450.00 | system   |
+|     102 | oracle complete ref | loni          |  550.00 | database |
+|     103 | mastering sql       | loni          |  250.00 | database |
+|     104 | pl sql ref          | scott urman   |  750.00 | database |
+|     105 | national geography  | adis scott    | 1000.00 | science  |
++---------+---------------------+---------------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from books where cost between(500 and 750) and category = "database";
++---------+---------------------+---------------+---------+----------+
+| book_no | book_name           | author_name   | cost    | category |
++---------+---------------------+---------------+---------+----------+
+|     101 | let us c            | denis ritchie |  450.00 | system   |
+|     102 | oracle complete ref | loni          |  550.00 | database |
+|     103 | mastering sql       | loni          |  250.00 | database |
+|     104 | pl sql ref          | scott urman   |  750.00 | database |
+|     105 | national geography  | adis scott    | 1000.00 | science  |
++---------+---------------------+---------------+---------+----------+
+5 rows in set, 6 warnings (0.01 sec)
+mysql> Q6   ^C
+mysql>
+mysql> select * from books where category in (science,databse,fiction,management);
+ERROR 1054 (42S22): Unknown column 'science' in 'where clause'
+mysql> select * from books where category in ("science","databse","fiction","management");
++---------+--------------------+-------------+---------+----------+
+| book_no | book_name          | author_name | cost    | category |
++---------+--------------------+-------------+---------+----------+
+|     105 | national geography | adis scott  | 1000.00 | science  |
++---------+--------------------+-------------+---------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from books where category in ("science","database","fiction","management");
++---------+---------------------+-------------+---------+----------+
+| book_no | book_name           | author_name | cost    | category |
++---------+---------------------+-------------+---------+----------+
+|     102 | oracle complete ref | loni        |  550.00 | database |
+|     103 | mastering sql       | loni        |  250.00 | database |
+|     104 | pl sql ref          | scott urman |  750.00 | database |
+|     105 | national geography  | adis scott  | 1000.00 | science  |
++---------+---------------------+-------------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> Q7   ^C
+mysql> table member;
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name           | mem_address    | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|      1 | richa sharma       | pune           | 2005-02-10    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      2 | garima sen         | pune           | 2026-03-20    | annual          |   1000.00 |                 3 |           NULL |
+|      3 | richa ghossh       | bangalore      | 2010-02-10    | half yearly     |   5000.00 |                 2 |           0.00 |
+|      4 | harshal bade       | neral          | 2005-05-10    | half yearly     |  50000.00 |               100 |           0.00 |
+|      5 | aditya surase      | sambhaji nagar | 2012-05-26    | quarterly       |   3000.00 |                 5 |         500.00 |
+|      6 | sanket suryawanshi | pune           | 2010-05-25    | annual          |    500.00 |                 1 |         400.00 |
+|      7 | vishal gadiwan     | pune           | 2012-01-26    | quarterly       |      0.00 |                 0 |        2000.00 |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from member order by penalty_amount desc;
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name           | mem_address    | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|      7 | vishal gadiwan     | pune           | 2012-01-26    | quarterly       |      0.00 |                 0 |        2000.00 |
+|      5 | aditya surase      | sambhaji nagar | 2012-05-26    | quarterly       |   3000.00 |                 5 |         500.00 |
+|      6 | sanket suryawanshi | pune           | 2010-05-25    | annual          |    500.00 |                 1 |         400.00 |
+|      1 | richa sharma       | pune           | 2005-02-10    | lifetime        |  25000.00 |                 5 |          50.00 |
+|      3 | richa ghossh       | bangalore      | 2010-02-10    | half yearly     |   5000.00 |                 2 |           0.00 |
+|      4 | harshal bade       | neral          | 2005-05-10    | half yearly     |  50000.00 |               100 |           0.00 |
+|      2 | garima sen         | pune           | 2026-03-20    | annual          |   1000.00 |                 3 |           NULL |
++--------+--------------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> Q8  ^C
+mysql> update books set cost = 300 ,set category = "rdbms" where book_no = 103;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set category = "rdbms" where book_no = 103' at line 1
+mysql> update books set cost = 300 ,category = "rdbms" where book_no = 103;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> table books;
++---------+---------------------+---------------+---------+----------+
+| book_no | book_name           | author_name   | cost    | category |
++---------+---------------------+---------------+---------+----------+
+|     101 | let us c            | denis ritchie |  450.00 | system   |
+|     102 | oracle complete ref | loni          |  550.00 | database |
+|     103 | mastering sql       | loni          |  300.00 | rdbms    |
+|     104 | pl sql ref          | scott urman   |  750.00 | database |
+|     105 | national geography  | adis scott    | 1000.00 | science  |
++---------+---------------------+---------------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> Q9   ^C
+mysql> select * from books order by category asc , cost desc;
++---------+---------------------+---------------+---------+----------+
+| book_no | book_name           | author_name   | cost    | category |
++---------+---------------------+---------------+---------+----------+
+|     104 | pl sql ref          | scott urman   |  750.00 | database |
+|     102 | oracle complete ref | loni          |  550.00 | database |
+|     103 | mastering sql       | loni          |  300.00 | rdbms    |
+|     105 | national geography  | adis scott    | 1000.00 | science  |
+|     101 | let us c            | denis ritchie |  450.00 | system   |
++---------+---------------------+---------------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> Q10  ^C
+mysql> select * from books  book_name like "%sql%";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'like "%sql%"' at line 1
+mysql> select * from books where book_name like "%sql%";
++---------+---------------+-------------+--------+----------+
+| book_no | book_name     | author_name | cost   | category |
++---------+---------------+-------------+--------+----------+
+|     103 | mastering sql | loni        | 300.00 | rdbms    |
+|     104 | pl sql ref    | scott urman | 750.00 | database |
++---------+---------------+-------------+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> Q11  ^C
+mysql> select lib_issue_id,issue_date,returned_date,datediff(issue_date,current_date) as no_of_days_from_issue from books;
+ERROR 1054 (42S22): Unknown column 'lib_issue_id' in 'field list'
+mysql> select lib_issue_id,issue_date,returned_date,datediff(issue_date,current_date) as no_of_days_from_issue from issue;
++--------------+------------+---------------+-----------------------+
+| lib_issue_id | issue_date | returned_date | no_of_days_from_issue |
++--------------+------------+---------------+-----------------------+
+|         7001 | 2010-12-24 | 2011-01-03    |                 -5565 |
+|         7002 | 2012-12-25 | 2013-01-04    |                 -4833 |
+|         7003 | 2015-01-25 | 2025-12-31    |                 -4072 |
+|         7004 | 2015-02-04 | 2015-02-14    |                 -4062 |
+|         7005 | 2015-03-25 | NULL          |                 -4013 |
+|         7006 | 2015-04-18 | 2015-04-28    |                 -3989 |
++--------------+------------+---------------+-----------------------+
+6 rows in set (0.00 sec)
+
+mysql> Q12   ^C
+mysql> select * from member order by joining_date;
+ERROR 1054 (42S22): Unknown column 'joining_date' in 'order clause'
+mysql> select * from member order by joining_date;
+ERROR 1054 (42S22): Unknown column 'joining_date' in 'order clause'
+mysql>
+mysql> Q13  ^C
+mysql> table issue;
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | 2011-01-03    |
+|         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |
+|         7003 |     104 |      1 | 2015-01-25 | 2025-12-31    |
+|         7004 |     101 |      1 | 2015-02-04 | 2015-02-14    |
+|         7005 |     104 |      2 | 2015-03-25 | NULL          |
+|         7006 |     101 |      3 | 2015-04-18 | 2015-04-28    |
++--------------+---------+--------+------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select count(*) from issue where mem_id = 1;
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.01 sec)
+
+mysql> select count(*) total_books_issued_to_member_ID_1 from issue where mem_id = 1;
++-----------------------------------+
+| total_books_issued_to_member_ID_1 |
++-----------------------------------+
+|                                 3 |
++-----------------------------------+
+1 row in set (0.00 sec)
+
+mysql> Q14  ^C
+mysql> select sum(penalty_amount) as total_penalty fro member;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'fro member' at line 1
+mysql> select sum(penalty_amount) as total_penalty from member;
++---------------+
+| total_penalty |
++---------------+
+|       2950.00 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> Q15   ^C
+mysql> select count(*) from member ;
++----------+
+| count(*) |
++----------+
+|        7 |
++----------+
+1 row in set (0.01 sec)
+
+mysql> Q16   ^C
+mysql> select count(*) from issue;
++----------+
+| count(*) |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) as tot_book_issued from issue;
++-----------------+
+| tot_book_issued |
++-----------------+
+|               6 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> Q17  ^C
+mysql> select avg(fees_paid) from member;
++----------------+
+| avg(fees_paid) |
++----------------+
+|   12071.428571 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> Q18  ^C
+mysql> select distinct category,count(category) from member;
+ERROR 1054 (42S22): Unknown column 'category' in 'field list'
+mysql> select distinct category,count(category) from books;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'sql_2.books.category'; this is incompatible with sql_mode=only_full_group_by
+mysql> select distinct category,count() from books ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') from books' at line 1
+mysql> select category, count(*) as total_books
+    -> from books
+    -> group by category;
++----------+-------------+
+| category | total_books |
++----------+-------------+
+| system   |           1 |
+| database |           2 |
+| rdbms    |           1 |
+| science  |           1 |
++----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> select category, count(category) as total_books from books group by category;
++----------+-------------+
+| category | total_books |
++----------+-------------+
+| system   |           1 |
+| database |           2 |
+| rdbms    |           1 |
+| science  |           1 |
++----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct category, count(category) as total_books from books group by category;
++----------+-------------+
+| category | total_books |
++----------+-------------+
+| system   |           1 |
+| database |           2 |
+| rdbms    |           1 |
+| science  |           1 |
++----------+-------------+
+4 rows in set (0.01 sec)

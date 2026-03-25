@@ -1,0 +1,396 @@
+mysql> use sql_4;
+Database changed
+mysql> create table employee (
+    -> emp_id int primary key auto_increment,
+    -> first_name varchar(20),
+    -> last_name varchar(20),
+    -> job_id int,
+    -> salary decimal(7,2),
+    -> manager_id int,
+    -> dept_id int
+    -> ) auto_increment = 100;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into employee(first_name, last_name, job_id, salary, manager_id, dept_id)
+    -> values
+    -> ("steven","king",1,24000,200,10),
+    -> ("neeha","kochhar",2,17000,200,10),
+    -> ("lex","de haan",2,17000,200,10),
+    -> ("alexander","hunold",3,9000,103,60),
+    -> ("bruce","ernst",3,6000,103,60),
+    -> ("david","austin",3,4800,103,60),
+    -> ("valli","pataballa",3,4800,103,60),
+    -> ("diana","lorentz",3,4200,114,30),
+    -> ("nancy","greenberg",4,12000,145,80),
+    -> ("daniel","faviet",4,9000,145,80);
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> table employee;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 24000.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 17000.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 17000.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 |  9000.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  6000.00 |        103 |      60 |
+|    105 | david      | austin    |      3 |  4800.00 |        103 |      60 |
+|    106 | valli      | pataballa |      3 |  4800.00 |        103 |      60 |
+|    107 | diana      | lorentz   |      3 |  4200.00 |        114 |      30 |
+|    108 | nancy      | greenberg |      4 | 12000.00 |        145 |      80 |
+|    109 | daniel     | faviet    |      4 |  9000.00 |        145 |      80 |
++--------+------------+-----------+--------+----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> Q1. ^C
+mysql>
+mysql> select first_name as FName , last_name as LName from employee;
++-----------+-----------+
+| FName     | LName     |
++-----------+-----------+
+| steven    | king      |
+| neeha     | kochhar   |
+| lex       | de haan   |
+| alexander | hunold    |
+| bruce     | ernst     |
+| david     | austin    |
+| valli     | pataballa |
+| diana     | lorentz   |
+| nancy     | greenberg |
+| daniel    | faviet    |
++-----------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> Q2  ^C
+mysql> select distinct dept_id from employee;
++---------+
+| dept_id |
++---------+
+|      10 |
+|      60 |
+|      30 |
+|      80 |
++---------+
+4 rows in set (0.00 sec)
+
+mysql> Q3  ^C
+mysql> select * from emplyee order by first_name desc;
+ERROR 1146 (42S02): Table 'sql_4.emplyee' doesn't exist
+mysql> select * from employee order by first_name desc;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    106 | valli      | pataballa |      3 |  4800.00 |        103 |      60 |
+|    100 | steven     | king      |      1 | 24000.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 17000.00 |        200 |      10 |
+|    108 | nancy      | greenberg |      4 | 12000.00 |        145 |      80 |
+|    102 | lex        | de haan   |      2 | 17000.00 |        200 |      10 |
+|    107 | diana      | lorentz   |      3 |  4200.00 |        114 |      30 |
+|    105 | david      | austin    |      3 |  4800.00 |        103 |      60 |
+|    109 | daniel     | faviet    |      4 |  9000.00 |        145 |      80 |
+|    104 | bruce      | ernst     |      3 |  6000.00 |        103 |      60 |
+|    103 | alexander  | hunold    |      3 |  9000.00 |        103 |      60 |
++--------+------------+-----------+--------+----------+------------+---------+
+10 rows in set (0.01 sec)
+
+mysql> Q4  ^C
+mysql> select first_name, last_name , salary , salary * 0.15 as pf from employee;
++------------+-----------+----------+-----------+
+| first_name | last_name | salary   | pf        |
++------------+-----------+----------+-----------+
+| steven     | king      | 24000.00 | 3600.0000 |
+| neeha      | kochhar   | 17000.00 | 2550.0000 |
+| lex        | de haan   | 17000.00 | 2550.0000 |
+| alexander  | hunold    |  9000.00 | 1350.0000 |
+| bruce      | ernst     |  6000.00 |  900.0000 |
+| david      | austin    |  4800.00 |  720.0000 |
+| valli      | pataballa |  4800.00 |  720.0000 |
+| diana      | lorentz   |  4200.00 |  630.0000 |
+| nancy      | greenberg | 12000.00 | 1800.0000 |
+| daniel     | faviet    |  9000.00 | 1350.0000 |
++------------+-----------+----------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> Q5  ^C
+mysql> select emp_id , concat(first_name,"",last_name) as employee_name , salary from employee order by salary asc;
++--------+-----------------+----------+
+| emp_id | employee_name   | salary   |
++--------+-----------------+----------+
+|    107 | dianalorentz    |  4200.00 |
+|    105 | davidaustin     |  4800.00 |
+|    106 | vallipataballa  |  4800.00 |
+|    104 | bruceernst      |  6000.00 |
+|    103 | alexanderhunold |  9000.00 |
+|    109 | danielfaviet    |  9000.00 |
+|    108 | nancygreenberg  | 12000.00 |
+|    101 | neehakochhar    | 17000.00 |
+|    102 | lexde haan      | 17000.00 |
+|    100 | stevenking      | 24000.00 |
++--------+-----------------+----------+
+10 rows in set (0.01 sec)
+
+mysql> select emp_id , concat(first_name," ",last_name) as employee_name , salary from employee order by salary asc;
++--------+------------------+----------+
+| emp_id | employee_name    | salary   |
++--------+------------------+----------+
+|    107 | diana lorentz    |  4200.00 |
+|    105 | david austin     |  4800.00 |
+|    106 | valli pataballa  |  4800.00 |
+|    104 | bruce ernst      |  6000.00 |
+|    103 | alexander hunold |  9000.00 |
+|    109 | daniel faviet    |  9000.00 |
+|    108 | nancy greenberg  | 12000.00 |
+|    101 | neeha kochhar    | 17000.00 |
+|    102 | lex de haan      | 17000.00 |
+|    100 | steven king      | 24000.00 |
++--------+------------------+----------+
+10 rows in set (0.00 sec)
+
+mysql> Q6  ^C
+mysql> select sum(salary) as salary_payable from employee;
++----------------+
+| salary_payable |
++----------------+
+|      107800.00 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> Q7  ^C
+mysql> select max(salary) as Highest_Salary , min(salary) as Lowest_Salary from employee;
++----------------+---------------+
+| Highest_Salary | Lowest_Salary |
++----------------+---------------+
+|       24000.00 |       4200.00 |
++----------------+---------------+
+1 row in set (0.00 sec)
+
+mysql> Q8   ^C
+mysql> select avg(salary) as average_salary,count(*) as total_employees from employee;
++----------------+-----------------+
+| average_salary | total_employees |
++----------------+-----------------+
+|   10780.000000 |              10 |
++----------------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> Q9   ^C
+mysql> select count(*) as total_no_of_employees from employee;
++-----------------------+
+| total_no_of_employees |
++-----------------------+
+|                    10 |
++-----------------------+
+1 row in set (0.01 sec)
+
+mysql> Q10   ^C
+mysql> select count(distinct job_id) as diff_job_roles from employee;
++----------------+
+| diff_job_roles |
++----------------+
+|              4 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> Q11   ^C
+mysql> select * from employee limit 5;
++--------+------------+-----------+--------+----------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+---------+
+|    100 | steven     | king      |      1 | 24000.00 |        200 |      10 |
+|    101 | neeha      | kochhar   |      2 | 17000.00 |        200 |      10 |
+|    102 | lex        | de haan   |      2 | 17000.00 |        200 |      10 |
+|    103 | alexander  | hunold    |      3 |  9000.00 |        103 |      60 |
+|    104 | bruce      | ernst     |      3 |  6000.00 |        103 |      60 |
++--------+------------+-----------+--------+----------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> Q12   ^C
+mysql> select first_name,last_name , salary from employee where salary between 10000 and 15000;
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| nancy      | greenberg | 12000.00 |
++------------+-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> Q13  ^C
+mysql> select first_name,last_name,dept_id from employee where dept_id in (10,30) order by dept_id;
++------------+-----------+---------+
+| first_name | last_name | dept_id |
++------------+-----------+---------+
+| steven     | king      |      10 |
+| neeha      | kochhar   |      10 |
+| lex        | de haan   |      10 |
+| diana      | lorentz   |      30 |
++------------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> Q14   ^C
+mysql> select first_name,last_name,dept_id from employee where dept_id in (30,100) and salary not between 10000 and 15000;
++------------+-----------+---------+
+| first_name | last_name | dept_id |
++------------+-----------+---------+
+| diana      | lorentz   |      30 |
++------------+-----------+---------+
+1 row in set (0.00 sec)
+
+mysql> select first_name,last_name,salary from employee where dept_id in (30,100) and salary not between 10000 and 15000;
++------------+-----------+---------+
+| first_name | last_name | salary  |
++------------+-----------+---------+
+| diana      | lorentz   | 4200.00 |
++------------+-----------+---------+
+1 row in set (0.00 sec)
+
+mysql> Q15   ^C
+mysql> select concat(first_name," ",last_name) as emplyee_names,hire_date from employees where year(hire_date)=1987;
+ERROR 1146 (42S02): Table 'sql_4.employees' doesn't exist
+mysql> select concat(first_name," ",last_name) as emplyee_names,hire_date from employee where year(hire_date)=1987;
++-----------------+------------+
+| emplyee_names   | hire_date  |
++-----------------+------------+
+| steven king     | 1987-04-03 |
+| david austin    | 1987-11-12 |
+| valli pataballa | 1987-01-16 |
++-----------------+------------+
+3 rows in set (0.01 sec)
+
+mysql> select concat(first_name," ",last_name) as emplyee_names,hire_date from employee where hire_date between "1987-1-1" and "1987-12-31";
++-----------------+------------+
+| emplyee_names   | hire_date  |
++-----------------+------------+
+| steven king     | 1987-04-03 |
+| david austin    | 1987-11-12 |
+| valli pataballa | 1987-01-16 |
++-----------------+------------+
+3 rows in set (0.01 sec)
+
+mysql> Q16   ^C
+mysql> select first_name from employee where first_name like "%b%c%";
++------------+
+| first_name |
++------------+
+| bruce      |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select first_name from employee where first_name like "%a%i%";
++------------+
+| first_name |
++------------+
+| david      |
+| valli      |
+| daniel     |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select first_name from employee where first_name like "%a%i%" or first_name like "%i%a%";
++------------+
+| first_name |
++------------+
+| david      |
+| valli      |
+| diana      |
+| daniel     |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select first_name from employee where first_name like "%a%" and first_name like "%i%";
++------------+
+| first_name |
++------------+
+| david      |
+| valli      |
+| diana      |
+| daniel     |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select first_name from employee where first_name like "%b%c%" or first_name like "%c%b%;
+    ">
+    "> ^C
+mysql> select first_name from employee where first_name like "%b%c%" or first_name like "%c%b%";
++------------+
+| first_name |
++------------+
+| bruce      |
++------------+
+1 row in set (0.00 sec)
+
+mysql> Q17  ^C
+mysql>
+mysql> select last_name,job_id,salary fro employee where salary not in (4800,17000,9000);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employee where salary not in (4800,17000,9000)' at line 1
+mysql> select last_name,job_id,salary from employee where salary not in (4800,17000,9000);
++-----------+--------+----------+
+| last_name | job_id | salary   |
++-----------+--------+----------+
+| king      |      1 | 24000.00 |
+| ernst     |      3 |  6000.00 |
+| lorentz   |      3 |  4200.00 |
+| greenberg |      4 | 12000.00 |
++-----------+--------+----------+
+4 rows in set (0.01 sec)
+
+mysql> Q18  ^C
+mysql> select last_name from employee where length(last_name)=5;
++-----------+
+| last_name |
++-----------+
+| ernst     |
++-----------+
+1 row in set (0.01 sec)
+
+mysql> select last_name from employee where length(last_name)=6;
++-----------+
+| last_name |
++-----------+
+| hunold    |
+| austin    |
+| faviet    |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> Q19   ^C
+mysql> select last_name from employee where last_name like "__e%";
++-----------+
+| last_name |
++-----------+
+| greenberg |
++-----------+
+1 row in set (0.01 sec)
+
+mysql> Q20   ^C
+mysql> select distinct job_id from employee;
++--------+
+| job_id |
++--------+
+|      1 |
+|      2 |
+|      3 |
+|      4 |
++--------+
+4 rows in set (0.02 sec)
+
+mysql> select distinct (job_id) from employee;
++--------+
+| job_id |
++--------+
+|      1 |
+|      2 |
+|      3 |
+|      4 |
++--------+
+4 rows in set (0.00 sec)
+
+mysql> Q21   ^C
+mysql> select * from employee where last_name in ("king","scott","blake","ford");
++--------+------------+-----------+--------+----------+------------+------------+---------+
+| emp_id | first_name | last_name | job_id | salary   | hire_date  | manager_id | dept_id |
++--------+------------+-----------+--------+----------+------------+------------+---------+
+|    100 | steven     | king      |      1 | 24000.00 | 1987-04-03 |        200 |      10 |
++--------+------------+-----------+--------+----------+------------+------------+---------+
+1 row in set (0.00 sec)
+
+mysql> exit;
