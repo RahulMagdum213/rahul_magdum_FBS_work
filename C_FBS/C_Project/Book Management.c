@@ -14,6 +14,7 @@ void removeBook(Book[],int*,int);
 void sortBook(Book[],int*,int);
 void displaybooks(Book[],int*);
 
+
 void main(){
     int c_i=0,choice,id;
     char searchName[30];
