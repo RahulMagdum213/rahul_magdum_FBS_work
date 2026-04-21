@@ -416,3 +416,263 @@ mysql> select distinct category, count(category) as total_books from books group
 | science  |           1 |
 +----------+-------------+
 4 rows in set (0.01 sec)
+mysql> Q19  ^C
+mysql> select book_no , count(*) from issue group by book_no order by count(*) desc;
++---------+----------+
+| book_no | count(*) |
++---------+----------+
+|     101 |        3 |
+|     104 |        2 |
+|     102 |        1 |
++---------+----------+
+3 rows in set (0.02 sec)
+
+mysql> Q20  ^C
+mysql> select max(penalty_amount),min(penalty_amount),sum(penalty_amount),avg(penalty_amount) from member;
++---------------------+---------------------+---------------------+---------------------+
+| max(penalty_amount) | min(penalty_amount) | sum(penalty_amount) | avg(penalty_amount) |
++---------------------+---------------------+---------------------+---------------------+
+|             2000.00 |                0.00 |             2950.00 |          491.666667 |
++---------------------+---------------------+---------------------+---------------------+
+1 row in set (0.01 sec)
+
+mysql> select max(penalty_amount) max_oen_amount,min(penalty_amount) min_pen_amount,sum(penalty_amount) tot_pen_amount,avg(penalty_amount) avg_pen_amount from member;
++----------------+----------------+----------------+----------------+
+| max_oen_amount | min_pen_amount | tot_pen_amount | avg_pen_amount |
++----------------+----------------+----------------+----------------+
+|        2000.00 |           0.00 |        2950.00 |     491.666667 |
++----------------+----------------+----------------+----------------+
+1 row in set (0.01 sec)
+
+mysql> Q21  ^C
+mysql> select mem_id , count(*) from member m join issue i on m.mem_id=i.mem_id group by mem_id having count(*) >2;
+ERROR 1052 (23000): Column 'mem_id' in field list is ambiguous
+mysql> select mem_id ,count(*) from issue group by mem_id having count(*)>2;
++--------+----------+
+| mem_id | count(*) |
++--------+----------+
+|      1 |        3 |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select mem_id ,count(*) from issue group by mem_id having count(*)>=2;
++--------+----------+
+| mem_id | count(*) |
++--------+----------+
+|      1 |        3 |
+|      2 |        2 |
++--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> Q22  ^C
+mysql>  select mem_id,book_no ,count(*) from issue group by mem_id,book_no ;
++--------+---------+----------+
+| mem_id | book_no | count(*) |
++--------+---------+----------+
+|      1 |     101 |        2 |
+|      2 |     102 |        1 |
+|      1 |     104 |        1 |
+|      2 |     104 |        1 |
+|      3 |     101 |        1 |
++--------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql>  select mem_id,book_no ,count(*) issue_count from issue group by mem_id,book_no ;
++--------+---------+-------------+
+| mem_id | book_no | issue_count |
++--------+---------+-------------+
+|      1 |     101 |           2 |
+|      2 |     102 |           1 |
+|      1 |     104 |           1 |
+|      2 |     104 |           1 |
+|      3 |     101 |           1 |
++--------+---------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> Q23 ^C
+mysql> select month(issue_date),count(*) from issue group by month(issue_date) order by count(*) desc;
++-------------------+----------+
+| month(issue_date) | count(*) |
++-------------------+----------+
+|                12 |        2 |
+|                 1 |        1 |
+|                 2 |        1 |
+|                 3 |        1 |
+|                 4 |        1 |
++-------------------+----------+
+5 rows in set (0.01 sec)
+mysql> Q24  ^C
+mysql> select book_no from books where book_no not in (select book_no from issue);
++---------+
+| book_no |
++---------+
+|     103 |
+|     105 |
++---------+
+2 rows in set (0.01 sec)
+
+mysql> Q25  ^C
+mysql> Write an SQL query to list member IDs who exist in Member table and have issued at least
+    -> one book.select distinct m.mem_id
+    -> from member m
+    -> join issue i
+    -> on m.mem_id = i.mem_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Write an SQL query to list member IDs who exist in Member table and have issued ' at line 1
+mysql> select distinct m.mem_id
+    -> from member m
+    -> join issue i
+    -> on m.mem_id = i.mem_id;
++--------+
+| mem_id |
++--------+
+|      1 |
+|      2 |
+|      3 |
++--------+
+3 rows in set (0.01 sec)
+
+mysql> select mem_id,count(*) from issue group by mem_id having max(count(*)),min(count(*));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',min(count(*))' at line 1
+mysql> Q26  ^C
+mysql>
+mysql>
+mysql>
+mysql> Q27^C
+mysql> select *
+    -> from issue
+    -> where month(issue_date) in (12, 7);
++--------------+---------+--------+------------+---------------+
+| lib_issue_id | book_no | mem_id | issue_date | returned_date |
++--------------+---------+--------+------------+---------------+
+|         7001 |     101 |      1 | 2010-12-24 | 2011-01-03    |
+|         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |
++--------------+---------+--------+------------+---------------+
+2 rows in set (0.02 sec)
+
+mysql> Q28  ^C
+mysql> select book_no ,book_name, issue_date from books b join issue i on b.book_no=i.book_no where month(issue_date)=12 and category="database";
+ERROR 1052 (23000): Column 'book_no' in field list is ambiguous
+mysql> select b.book_no ,b.book_name, i.issue_date from books b join issue i on b.book_no=i.book_no where month(issue_date)=12 and category="database";
++---------+---------------------+------------+
+| book_no | book_name           | issue_date |
++---------+---------------------+------------+
+|     102 | oracle complete ref | 2012-12-25 |
++---------+---------------------+------------+
+1 row in set (0.05 sec)
+
+mysql> Q29^C
+mysql> select mem_id,mem_name,max_book_allowed from member order by max_book_allowed desc;
+ERROR 1054 (42S22): Unknown column 'max_book_allowed' in 'field list'
+mysql> select mem_id,mem_name,max_book_allowed from member order by max_books_allowed desc;
+ERROR 1054 (42S22): Unknown column 'max_book_allowed' in 'field list'
+mysql> select mem_id,mem_name,max_books_allowed from member order by max_books_allowed desc;
++--------+--------------------+-------------------+
+| mem_id | mem_name           | max_books_allowed |
++--------+--------------------+-------------------+
+|      4 | harshal bade       |               100 |
+|      1 | richa sharma       |                 5 |
+|      5 | aditya surase      |                 5 |
+|      2 | garima sen         |                 3 |
+|      3 | richa ghossh       |                 2 |
+|      6 | sanket suryawanshi |                 1 |
+|      7 | vishal gadiwan     |                 0 |
++--------+--------------------+-------------------+
+7 rows in set (0.02 sec)
+
+mysql>  Q 30^C
+mysql> select b.book_no,b.book_name,i.issue_date,i.returned_date from books b join issue i on b.book_no=i.book_no join member m on m.mem_id=i.mem_id where mem_name="richa sharma";
++---------+------------+------------+---------------+
+| book_no | book_name  | issue_date | returned_date |
++---------+------------+------------+---------------+
+|     101 | let us c   | 2010-12-24 | 2011-01-03    |
+|     104 | pl sql ref | 2015-01-25 | 2025-12-31    |
+|     101 | let us c   | 2015-02-04 | 2015-02-14    |
++---------+------------+------------+---------------+
+3 rows in set (0.01 sec)
+
+mysql> Q31  ^C
+mysql> select * from member m join issue i on m.mem_id=i.mem_id join books b on b.book_no=i.book_no where category="database";
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+--------------+---------+--------+------------+---------------+---------+---------------------+-------------+--------+----------+
+| mem_id | mem_name     | mem_address | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount | lib_issue_id | book_no | mem_id | issue_date | returned_date | book_no | book_name           | author_name | cost   | category |
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+--------------+---------+--------+------------+---------------+---------+---------------------+-------------+--------+----------+
+|      2 | garima sen   | pune        | 2026-03-20    | annual          |   1000.00 |                 3 |           NULL |         7002 |     102 |      2 | 2012-12-25 | 2013-01-04    |     102 | oracle complete ref | loni        | 550.00 | database |
+|      1 | richa sharma | pune        | 2005-02-10    | lifetime        |  25000.00 |                 5 |          50.00 |         7003 |     104 |      1 | 2015-01-25 | 2025-12-31    |     104 | pl sql ref          | scott urman | 750.00 | database |
+|      2 | garima sen   | pune        | 2026-03-20    | annual          |   1000.00 |                 3 |           NULL |         7005 |     104 |      2 | 2015-03-25 | NULL          |     104 | pl sql ref          | scott urman | 750.00 | database |
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+--------------+---------+--------+------------+---------------+---------+---------------------+-------------+--------+----------+
+3 rows in set (0.01 sec)
+
+mysql> select *
+    -> from member
+    -> where mem_id in (
+    ->     select mem_id
+    ->     from issue
+    ->     where book_no in (
+    ->         select book_no
+    ->         from books
+    ->         where category = 'database'
+    ->     )
+    -> );
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+
+| mem_id | mem_name     | mem_address | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+
+|      2 | garima sen   | pune        | 2026-03-20    | annual          |   1000.00 |                 3 |           NULL |
+|      1 | richa sharma | pune        | 2005-02-10    | lifetime        |  25000.00 |                 5 |          50.00 |
++--------+--------------+-------------+---------------+-----------------+-----------+-------------------+----------------+
+2 rows in set (0.02 sec)
+
+mysql> Q32  ^C
+mysql> select * from books group by category having max(cost);
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'sql_2.books.book_no' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select category from books group by category having max(cost);
++----------+
+| category |
++----------+
+| system   |
+| database |
+| rdbms    |
+| science  |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select category,cost from books group by category,cost having max(cost);
++----------+---------+
+| category | cost    |
++----------+---------+
+| system   |  450.00 |
+| database |  550.00 |
+| rdbms    |  300.00 |
+| database |  750.00 |
+| science  | 1000.00 |
++----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct category,cost from books group by category,cost having max(cost);
++----------+---------+
+| category | cost    |
++----------+---------+
+| system   |  450.00 |
+| database |  550.00 |
+| rdbms    |  300.00 |
+| database |  750.00 |
+| science  | 1000.00 |
++----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct category,cost from books group by distinct category,cost having max(cost);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct category,cost having max(cost)' at line 1
+mysql> select *
+    -> from books b1
+    -> where cost = (
+    ->     select max(cost)
+    ->     from books b2
+    ->     where b1.category = b2.category
+    -> );
++---------+--------------------+---------------+---------+----------+
+| book_no | book_name          | author_name   | cost    | category |
++---------+--------------------+---------------+---------+----------+
+|     101 | let us c           | denis ritchie |  450.00 | system   |
+|     103 | mastering sql      | loni          |  300.00 | rdbms    |
+|     104 | pl sql ref         | scott urman   |  750.00 | database |
+|     105 | national geography | adis scott    | 1000.00 | science  |
++---------+--------------------+---------------+---------+----------+
+4 rows in set (0.02 sec)
