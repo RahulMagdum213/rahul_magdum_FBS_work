@@ -1,0 +1,90 @@
+
+class Date{
+
+	int day,month,year;
+	String dow;
+	
+	// default constructor
+	
+	Date(){
+		this.day=2;
+		this.month=4;
+		this.year=2008;
+		this.dow="Funday";
+	}
+	
+	// parameterized constructor
+	
+	Date(int d,int m,int y,String str){
+		this.day=d;
+		this.month=m;
+		this.year=y;
+		this.dow=str;
+	}
+	
+	void setDay(int d) {
+		this.day=d;
+	}
+	void setMonth(int m) {
+		this.month=m;
+	}
+	void setYear(int y) {
+		this.year=y;
+	}
+	
+	void setDow(String str) {
+		dow=str;		
+	}
+	int getDay() {
+		return day;
+	}
+	int getMonth() {
+		
+		return month;
+	}
+	int getYear() {
+		return year;
+	}
+	String getDow() {
+		return dow;
+	}
+	void display() {
+		System.out.println(getDay()+"/"+getMonth()+"/"+getYear()+" Day of week is:"+getDow());
+	}
+	
+
+	
+}
+
+public class Test {
+
+	public static void main(String[] args) {
+		
+		Date d1,d2,d3,d4;
+		
+		d1=new Date();
+		d2=new Date();
+		d3=new Date();
+		
+		
+		d1.setDay(7);
+		d1.setMonth(4);
+		d1.setYear(2026);
+		d1.setDow("Monday");
+		
+		d2.setDay(8);
+		d2.setMonth(4);
+		d2.setYear(2026);
+		d2.setDow("Tuesday");
+		
+		d1.display();
+		d2.display();
+		d3.display();
+		
+		d4 = new Date(5,10,2015,"Funday");
+		d4.display();
+
+		
+	}
+
+}
